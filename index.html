@@ -1,278 +1,413 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EXP Live Sandbox</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#0A0C12;
-    --panel:#10131C;
-    --orange:#FF6A2C;
-    --steel:#5FA8D3;
-    --white:#ECECEC;
-    --line:#1E2330;
-    --muted:#6B7280;
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;height:100%;}
-  body{
-    background:var(--bg);
-    color:var(--white);
-    font-family:'Space Grotesk',sans-serif;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-    overflow:hidden;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EXP Live Sandbox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0A0C12;
+      --panel: #10131C;
+      --orange: #FF6A2C;
+      --steel: #5FA8D3;
+      --white: #ECECEC;
+      --line: #1E2330;
+      --muted: #6B7280;
+    }
 
-  .app-wrap{
-    display:flex;
-    align-items:stretch;
-    gap:16px;
-    height:100%;
-    max-height:100vh;
-    padding:14px;
-  }
+    * {
+      box-sizing: border-box;
+    }
 
-  .shorts-frame{
-    height:100%;
-    max-height:100%;
-    aspect-ratio:9/16;
-    display:flex;
-    flex-direction:column;
-    border-left:1px solid var(--line);
-    border-right:1px solid var(--line);
-    position:relative;
-  }
+    html,
+    body {
+      margin: 0;
+      height: 100%;
+    }
 
-  /* ---------- Side panel: recording controls, sits outside the 9:16 frame ---------- */
-  .side-panel{
-    flex-shrink:0;
-    width:190px;
-    display:flex;
-    flex-direction:column;
-    gap:14px;
-    background:var(--panel);
-    border:1px solid var(--line);
-    border-radius:12px;
-    padding:16px;
-    align-self:center;
-  }
-  .side-panel h3{
-    margin:0;
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:1px;
-    color:var(--muted);
-    font-weight:700;
-  }
-  .side-group{
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-  }
-  .slider-row{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:8px;
-  }
-  .slider-row label{
-    font-size:12px;
-    color:var(--muted);
-    flex-shrink:0;
-  }
-  .slider-row input[type=range]{
-    width:100%;
-  }
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Space Grotesk', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      /* overflow: hidden; */
+    }
 
-  /* ---------- Top half: live preview ---------- */
-  .preview-pane{
-    flex:1;
-    display:flex;
-    flex-direction:column;
-    min-height:0;
-    background:#fff;
-    border-bottom:2px solid var(--orange);
-  }
-  .preview-header{
-    flex-shrink:0;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:8px 12px;
-    background:var(--panel);
-  }
-  .brand{
-    display:flex;
-    align-items:center;
-    gap:6px;
-    font-weight:700;
-    font-size:12px;
-    letter-spacing:0.5px;
-  }
-  .brand .dot{
-    width:7px;height:7px;border-radius:50%;
-    background:var(--orange);
-    box-shadow:0 0 6px var(--orange);
-  }
-  .rec{
-    display:flex;
-    align-items:center;
-    gap:5px;
-    font-size:10px;
-    font-weight:700;
-    color:#ff4444;
-    letter-spacing:1px;
-  }
-  .rec .blip{
-    width:6px;height:6px;border-radius:50%;
-    background:#ff4444;
-    animation:pulse 1.2s infinite;
-  }
-  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:0.25;} }
+    .app-wrap {
+      display: flex;
+      align-items: stretch;
+      gap: 16px;
+      height: 100%;
+      max-height: 100vh;
+      padding: 14px;
+    }
 
-  iframe{
-    flex:1;
-    width:100%;
-    border:none;
-    background:#fff;
-  }
+    .shorts-frame {
+      height: 100%;
+      max-height: 100%;
+      aspect-ratio: 9/16;
+      display: flex;
+      flex-direction: column;
+      border-left: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      position: relative;
+    }
 
-  /* ---------- Bottom half: editor ---------- */
-  .editor-pane{
-    flex:1;
-    display:flex;
-    flex-direction:column;
-    min-height:0;
-    background:var(--panel);
-  }
+    /* ---------- Side panel: recording controls, sits outside the 9:16 frame ---------- */
+    .side-panel {
+      flex-shrink: 0;
+      width: 190px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+      align-self: center;
+    }
 
-  .tabs{
-    flex-shrink:0;
-    display:flex;
-    gap:6px;
-    padding:8px 10px;
-    border-bottom:1px solid var(--line);
-  }
-  .tab{
-    flex:1;
-    background:transparent;
-    border:1px solid var(--line);
-    border-radius:8px;
-    padding:8px 0;
-    font-family:'Space Grotesk',sans-serif;
-    font-size:13px;
-    font-weight:700;
-    color:var(--muted);
-    cursor:pointer;
-    letter-spacing:0.5px;
-    transition:all .15s ease;
-  }
-  .tab.active[data-tab="html"]{ color:var(--orange); border-color:var(--orange); background:rgba(255,106,44,0.08); }
-  .tab.active[data-tab="css"]{ color:var(--steel); border-color:var(--steel); background:rgba(95,168,211,0.08); }
-  .tab.active[data-tab="js"]{ color:#F2C744; border-color:#F2C744; background:rgba(242,199,68,0.08); }
+    .side-panel h3 {
+      margin: 0;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      font-weight: 700;
+    }
 
-  .tab-dot{
-    display:inline-block;
-    width:6px;height:6px;
-    border-radius:50%;
-    margin-right:6px;
-  }
-  .tab[data-tab="html"] .tab-dot{ background:var(--orange); }
-  .tab[data-tab="css"] .tab-dot{ background:var(--steel); }
-  .tab[data-tab="js"] .tab-dot{ background:#F2C744; }
+    .side-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
 
-  .editors{
-    position:relative;
-    flex:1;
-    min-height:0;
-  }
-  .editor-item{
-    position:absolute;
-    inset:0;
-    display:none;
-    background:var(--bg);
-  }
-  .editor-item.active{ display:block; }
+    .slider-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
 
-  .highlight, textarea{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    margin:0;
-    border:none;
-    font-family:'JetBrains Mono',monospace;
-    font-size:14px;
-    line-height:1.5;
-    padding:12px 14px;
-    white-space:pre-wrap;
-    word-break:break-word;
-    overflow:auto;
-  }
-  .highlight{
-    color:var(--white);
-    pointer-events:none;
-    z-index:1;
-  }
-  textarea{
-    z-index:2;
-    outline:none;
-    resize:none;
-    background:transparent;
-    color:transparent;
-    -webkit-text-fill-color:transparent;
-    caret-color:var(--orange);
-  }
+    .slider-row label {
+      font-size: 12px;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
 
-  /* token colors */
-  .tk-kw{ color:var(--orange); font-weight:700; }
-  .tk-str{ color:#9EE493; }
-  .tk-com{ color:var(--muted); font-style:italic; }
-  .tk-num{ color:var(--steel); }
-  .tk-tag{ color:var(--orange); }
-  .tk-attr{ color:var(--steel); }
-  .tk-fn{ color:#F2C744; }
+    .slider-row input[type=range] {
+      width: 100%;
+    }
 
-  .toolbar-left{ display:flex; flex-direction:column; gap:10px; }
-  input[type=range]{ accent-color:var(--orange); }
-  button.action{
-    background:transparent;
-    color:var(--white);
-    border:1px solid var(--line);
-    border-radius:6px;
-    padding:8px 9px;
-    font-size:12px;
-    font-family:'Space Grotesk',sans-serif;
-    font-weight:600;
-    cursor:pointer;
-    white-space:nowrap;
-    width:100%;
-    text-align:center;
-  }
-  button.action:hover{ border-color:var(--orange); color:var(--orange); }
-  button.action.primary{ border-color:var(--orange); color:var(--orange); }
-  button.action:disabled{ opacity:0.35; cursor:default; }
+    /* ---------- Top half: live preview ---------- */
+    .preview-pane {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      background: #fff;
+      border-bottom: 2px solid var(--orange);
+    }
 
-  /* Present mode: hide chrome so only frame content shows (clean for capture) */
-  body.present .preview-header,
-  body.present .tabs{
-    display:none !important;
-  }
-  body.present .shorts-frame{
-    border:none;
-  }
-  body.present #presentToggle{
-    border-color:var(--orange);
-    color:var(--orange);
-  }
-</style>
+    .preview-header {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: var(--panel);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .brand .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--orange);
+      box-shadow: 0 0 6px var(--orange);
+    }
+
+    .rec {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #ff4444;
+      letter-spacing: 1px;
+    }
+
+    .rec .blip {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #ff4444;
+      animation: pulse 1.2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.25;
+      }
+    }
+
+    iframe {
+      flex: 1;
+      width: 100%;
+      border: none;
+      background: #fff;
+    }
+
+    /* ---------- Bottom half: editor ---------- */
+    .editor-pane {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      background: var(--panel);
+    }
+
+    .tabs {
+      flex-shrink: 0;
+      display: flex;
+      gap: 6px;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .tab {
+      flex: 1;
+      background: transparent;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 0;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: all .15s ease;
+    }
+
+    .tab.active[data-tab="html"] {
+      color: var(--orange);
+      border-color: var(--orange);
+      background: rgba(255, 106, 44, 0.08);
+    }
+
+    .tab.active[data-tab="css"] {
+      color: var(--steel);
+      border-color: var(--steel);
+      background: rgba(95, 168, 211, 0.08);
+    }
+
+    .tab.active[data-tab="js"] {
+      color: #F2C744;
+      border-color: #F2C744;
+      background: rgba(242, 199, 68, 0.08);
+    }
+
+    .tab-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-right: 6px;
+    }
+
+    .tab[data-tab="html"] .tab-dot {
+      background: var(--orange);
+    }
+
+    .tab[data-tab="css"] .tab-dot {
+      background: var(--steel);
+    }
+
+    .tab[data-tab="js"] .tab-dot {
+      background: #F2C744;
+    }
+
+    .editors {
+      position: relative;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .editor-item {
+      position: absolute;
+      inset: 0;
+      display: none;
+      background: var(--bg);
+    }
+
+    .editor-item.active {
+      display: block;
+    }
+
+    .highlight,
+    textarea {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      border: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      padding: 12px 14px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      overflow: auto;
+    }
+
+    .highlight {
+      color: var(--white);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    textarea {
+      z-index: 2;
+      outline: none;
+      resize: none;
+      background: transparent;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      caret-color: var(--orange);
+    }
+
+    /* token colors */
+    .tk-kw {
+      color: var(--orange);
+      font-weight: 700;
+    }
+
+    .tk-str {
+      color: #9EE493;
+    }
+
+    .tk-com {
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .tk-num {
+      color: var(--steel);
+    }
+
+    .tk-tag {
+      color: var(--orange);
+    }
+
+    .tk-attr {
+      color: var(--steel);
+    }
+
+    .tk-fn {
+      color: #F2C744;
+    }
+
+    .toolbar-left {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    input[type=range] {
+      accent-color: var(--orange);
+    }
+
+    button.action {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 8px 9px;
+      font-size: 12px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      width: 100%;
+      text-align: center;
+    }
+
+    button.action:hover {
+      border-color: var(--orange);
+      color: var(--orange);
+    }
+
+    button.action.primary {
+      border-color: var(--orange);
+      color: var(--orange);
+    }
+
+    button.action:disabled {
+      opacity: 0.35;
+      cursor: default;
+    }
+
+    /* Present mode: hide chrome so only frame content shows (clean for capture) */
+    body.present .preview-header,
+    body.present .tabs {
+      display: none !important;
+    }
+
+    body.present .shorts-frame {
+      border: none;
+    }
+
+    body.present #presentToggle {
+      border-color: var(--orange);
+      color: var(--orange);
+    }
+
+
+    @media(max-width:500px){
+      .app-wrap{
+        flex-direction: column;
+      }
+
+      .side-panel{
+        width:300px;
+      }
+
+      .toolbar-left{
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+
+      button.action{
+        width:48%;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
   <div class="app-wrap">
@@ -354,291 +489,292 @@ button{
     </div>
   </div>
 
-<script>
-const tabs = document.querySelectorAll('.tab');
-const editors = { html: document.getElementById('htmlEditor'), css: document.getElementById('cssEditor'), js: document.getElementById('jsEditor') };
-const frame = document.getElementById('previewFrame');
-const fontSize = document.getElementById('fontSize');
-const speed = document.getElementById('speed');
-const playBtn = document.getElementById('playBtn');
-const playAllBtn = document.getElementById('playAllBtn');
-const stopBtn = document.getElementById('stopBtn');
-const presentToggle = document.getElementById('presentToggle');
+  <script>
+    const tabs = document.querySelectorAll('.tab');
+    const editors = { html: document.getElementById('htmlEditor'), css: document.getElementById('cssEditor'), js: document.getElementById('jsEditor') };
+    const frame = document.getElementById('previewFrame');
+    const fontSize = document.getElementById('fontSize');
+    const speed = document.getElementById('speed');
+    const playBtn = document.getElementById('playBtn');
+    const playAllBtn = document.getElementById('playAllBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const presentToggle = document.getElementById('presentToggle');
 
-const defaults = {
-  html: '<h1>Hello EXP</h1>\n<p>Edit HTML, CSS or JS — the preview above updates live.</p>\n<button id="btn">Click me</button>',
-  css: 'body{\n  font-family: sans-serif;\n  text-align:center;\n  padding:24px;\n  background:#fff;\n  color:#111;\n}\nh1{ color:#FF6A2C; }\nbutton{\n  padding:10px 18px;\n  border:none;\n  border-radius:8px;\n  background:#5FA8D3;\n  color:#fff;\n  font-weight:600;\n  cursor:pointer;\n}',
-  js: "document.getElementById('btn').addEventListener('click', function(){\n  alert('Hello from EXP Studio!');\n});"
-};
+    const defaults = {
+      html: '<h1>Hello EXP</h1>\n<p>Edit HTML, CSS or JS — the preview above updates live.</p>\n<button id="btn">Click me</button>',
+      css: 'body{\n  font-family: sans-serif;\n  text-align:center;\n  padding:24px;\n  background:#fff;\n  color:#111;\n}\nh1{ color:#FF6A2C; }\nbutton{\n  padding:10px 18px;\n  border:none;\n  border-radius:8px;\n  background:#5FA8D3;\n  color:#fff;\n  font-weight:600;\n  cursor:pointer;\n}',
+      js: "document.getElementById('btn').addEventListener('click', function(){\n  alert('Hello from EXP Studio!');\n});"
+    };
 
-function activateTab(name){
-  tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
-  document.querySelectorAll('.editor-item').forEach(el => el.classList.toggle('active', el.dataset.item === name));
-}
+    function activateTab(name) {
+      tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+      document.querySelectorAll('.editor-item').forEach(el => el.classList.toggle('active', el.dataset.item === name));
+    }
 
-/* ---------- Syntax highlighting overlay ---------- */
-const highlights = { html: document.getElementById('htmlHighlight'), css: document.getElementById('cssHighlight'), js: document.getElementById('jsHighlight') };
+    /* ---------- Syntax highlighting overlay ---------- */
+    const highlights = { html: document.getElementById('htmlHighlight'), css: document.getElementById('cssHighlight'), js: document.getElementById('jsHighlight') };
 
-function escapeHtml(s){
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
+    function escapeHtml(s) {
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
 
-function highlightHTML(text){
-  const s = escapeHtml(text);
-  const re = /(&lt;!--[\s\S]*?--&gt;)|(&lt;\/?)([a-zA-Z0-9]+)|([a-zA-Z-]+)(=)(".*?")/g;
-  return s.replace(re, (match, comment, bracket, tagName, attrName, eq, attrVal) => {
-    if(comment !== undefined) return `<span class="tk-com">${comment}</span>`;
-    if(tagName !== undefined) return `${bracket}<span class="tk-tag">${tagName}</span>`;
-    if(attrName !== undefined) return `<span class="tk-attr">${attrName}</span>${eq}<span class="tk-str">${attrVal}</span>`;
-    return match;
-  });
-}
+    function highlightHTML(text) {
+      const s = escapeHtml(text);
+      const re = /(&lt;!--[\s\S]*?--&gt;)|(&lt;\/?)([a-zA-Z0-9]+)|([a-zA-Z-]+)(=)(".*?")/g;
+      return s.replace(re, (match, comment, bracket, tagName, attrName, eq, attrVal) => {
+        if (comment !== undefined) return `<span class="tk-com">${comment}</span>`;
+        if (tagName !== undefined) return `${bracket}<span class="tk-tag">${tagName}</span>`;
+        if (attrName !== undefined) return `<span class="tk-attr">${attrName}</span>${eq}<span class="tk-str">${attrVal}</span>`;
+        return match;
+      });
+    }
 
-function highlightCSS(text){
-  const s = escapeHtml(text);
-  const re = /(\/\*[\s\S]*?\*\/)|([.#]?[\w-]+)(\s*\{)|([\w-]+)(\s*:\s*)([^;{}]+)(;)/g;
-  return s.replace(re, (match, comment, selName, selBrace, propName, colon, value, semi) => {
-    if(comment !== undefined) return `<span class="tk-com">${comment}</span>`;
-    if(selName !== undefined) return `<span class="tk-tag">${selName}</span>${selBrace}`;
-    if(propName !== undefined) return `<span class="tk-attr">${propName}</span>${colon}<span class="tk-str">${value}</span>${semi}`;
-    return match;
-  });
-}
+    function highlightCSS(text) {
+      const s = escapeHtml(text);
+      const re = /(\/\*[\s\S]*?\*\/)|([.#]?[\w-]+)(\s*\{)|([\w-]+)(\s*:\s*)([^;{}]+)(;)/g;
+      return s.replace(re, (match, comment, selName, selBrace, propName, colon, value, semi) => {
+        if (comment !== undefined) return `<span class="tk-com">${comment}</span>`;
+        if (selName !== undefined) return `<span class="tk-tag">${selName}</span>${selBrace}`;
+        if (propName !== undefined) return `<span class="tk-attr">${propName}</span>${colon}<span class="tk-str">${value}</span>${semi}`;
+        return match;
+      });
+    }
 
-function highlightJS(text){
-  const s = escapeHtml(text);
-  const kwList = 'function|const|let|var|return|if|else|for|while|in|of|new|class|extends|import|export|default|from|async|await|try|catch|finally|switch|case|break|continue|typeof|instanceof|null|undefined|true|false';
-  const re = new RegExp('(\\/\\/.*)|(\\/\\*[\\s\\S]*?\\*\\/)|(`.*?`|".*?"|\'.*?\')|\\b(' + kwList + ')\\b|\\b(\\d+\\.?\\d*)\\b|\\b([a-zA-Z_$][\\w$]*)(\\()', 'g');
-  return s.replace(re, (match, lineComment, blockComment, str, kw, num, fnName, paren) => {
-    if(lineComment !== undefined) return `<span class="tk-com">${lineComment}</span>`;
-    if(blockComment !== undefined) return `<span class="tk-com">${blockComment}</span>`;
-    if(str !== undefined) return `<span class="tk-str">${str}</span>`;
-    if(kw !== undefined) return `<span class="tk-kw">${kw}</span>`;
-    if(num !== undefined) return `<span class="tk-num">${num}</span>`;
-    if(fnName !== undefined) return `<span class="tk-fn">${fnName}</span>${paren}`;
-    return match;
-  });
-}
+    function highlightJS(text) {
+      const s = escapeHtml(text);
+      const kwList = 'function|const|let|var|return|if|else|for|while|in|of|new|class|extends|import|export|default|from|async|await|try|catch|finally|switch|case|break|continue|typeof|instanceof|null|undefined|true|false';
+      const re = new RegExp('(\\/\\/.*)|(\\/\\*[\\s\\S]*?\\*\\/)|(`.*?`|".*?"|\'.*?\')|\\b(' + kwList + ')\\b|\\b(\\d+\\.?\\d*)\\b|\\b([a-zA-Z_$][\\w$]*)(\\()', 'g');
+      return s.replace(re, (match, lineComment, blockComment, str, kw, num, fnName, paren) => {
+        if (lineComment !== undefined) return `<span class="tk-com">${lineComment}</span>`;
+        if (blockComment !== undefined) return `<span class="tk-com">${blockComment}</span>`;
+        if (str !== undefined) return `<span class="tk-str">${str}</span>`;
+        if (kw !== undefined) return `<span class="tk-kw">${kw}</span>`;
+        if (num !== undefined) return `<span class="tk-num">${num}</span>`;
+        if (fnName !== undefined) return `<span class="tk-fn">${fnName}</span>${paren}`;
+        return match;
+      });
+    }
 
-const highlighters = { html: highlightHTML, css: highlightCSS, js: highlightJS };
+    const highlighters = { html: highlightHTML, css: highlightCSS, js: highlightJS };
 
-function refreshHighlight(key){
-  const el = highlights[key];
-  if(!el) return;
-  el.innerHTML = highlighters[key](editors[key].value) + '\n';
-}
+    function refreshHighlight(key) {
+      const el = highlights[key];
+      if (!el) return;
+      el.innerHTML = highlighters[key](editors[key].value) + '\n';
+    }
 
-function refreshAllHighlights(){
-  refreshHighlight('html');
-  refreshHighlight('css');
-  refreshHighlight('js');
-}
+    function refreshAllHighlights() {
+      refreshHighlight('html');
+      refreshHighlight('css');
+      refreshHighlight('js');
+    }
 
-Object.keys(editors).forEach(key => {
-  editors[key].addEventListener('scroll', () => {
-    highlights[key].scrollTop = editors[key].scrollTop;
-    highlights[key].scrollLeft = editors[key].scrollLeft;
-  });
-});
+    Object.keys(editors).forEach(key => {
+      editors[key].addEventListener('scroll', () => {
+        highlights[key].scrollTop = editors[key].scrollTop;
+        highlights[key].scrollLeft = editors[key].scrollLeft;
+      });
+    });
 
-tabs.forEach(tab => {
-  tab.addEventListener('click', () => {
-    if(isPlaying) return;
-    activateTab(tab.dataset.tab);
-  });
-});
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        if (isPlaying) return;
+        activateTab(tab.dataset.tab);
+      });
+    });
 
-/* ---------- Persistent preview shell (no reload => no flash) ---------- */
-const shellDoc = '<!DOCTYPE html><html><head><style id="css-slot"></style></head><body><div id="html-slot"></div><script id="js-slot"><\/script></body></html>';
-let frameReady = false;
+    /* ---------- Persistent preview shell (no reload => no flash) ---------- */
+    const shellDoc = '<!DOCTYPE html><html><head><style id="css-slot"></style></head><body><div id="html-slot"></div><script id="js-slot"><\/script></body></html>';
+    let frameReady = false;
 
-frame.addEventListener('load', () => {
-  frameReady = true;
-  updateHTML();
-  updateCSS();
-  updateJS();
-});
-frame.srcdoc = shellDoc;
+    frame.addEventListener('load', () => {
+      frameReady = true;
+      updateHTML();
+      updateCSS();
+      updateJS();
+    });
+    frame.srcdoc = shellDoc;
 
-function updateHTML(){
-  const doc = frame.contentDocument;
-  if(!doc) return;
-  const slot = doc.getElementById('html-slot');
-  if(slot) slot.innerHTML = editors.html.value;
-}
+    function updateHTML() {
+      const doc = frame.contentDocument;
+      if (!doc) return;
+      const slot = doc.getElementById('html-slot');
+      if (slot) slot.innerHTML = editors.html.value;
+    }
 
-function updateCSS(){
-  const doc = frame.contentDocument;
-  if(!doc) return;
-  const slot = doc.getElementById('css-slot');
-  if(slot) slot.textContent = editors.css.value;
-}
+    function updateCSS() {
+      const doc = frame.contentDocument;
+      if (!doc) return;
+      const slot = doc.getElementById('css-slot');
+      if (slot) slot.textContent = editors.css.value;
+    }
 
-function updateJS(){
-  const doc = frame.contentDocument;
-  if(!doc) return;
-  const old = doc.getElementById('js-slot');
-  if(old) old.remove();
-  const script = doc.createElement('script');
-  script.id = 'js-slot';
-  script.textContent = editors.js.value;
-  doc.body.appendChild(script);
-}
+    function updateJS() {
+      const doc = frame.contentDocument;
+      if (!doc) return;
+      const old = doc.getElementById('js-slot');
+      if (old) old.remove();
+      const script = doc.createElement('script');
+      script.id = 'js-slot';
+      script.textContent = editors.js.value;
+      doc.body.appendChild(script);
+    }
 
-const updaters = { html: updateHTML, css: updateCSS, js: updateJS };
+    const updaters = { html: updateHTML, css: updateCSS, js: updateJS };
 
-function clearPreviewSlot(key){
-  const doc = frame.contentDocument;
-  if(!doc) return;
-  if(key === 'html'){
-    const slot = doc.getElementById('html-slot');
-    if(slot) slot.innerHTML = '';
-  } else if(key === 'css'){
-    const slot = doc.getElementById('css-slot');
-    if(slot) slot.textContent = '';
-  } else if(key === 'js'){
-    const old = doc.getElementById('js-slot');
-    if(old) old.remove();
-    const script = doc.createElement('script');
-    script.id = 'js-slot';
-    doc.body.appendChild(script);
-  }
-}
+    function clearPreviewSlot(key) {
+      const doc = frame.contentDocument;
+      if (!doc) return;
+      if (key === 'html') {
+        const slot = doc.getElementById('html-slot');
+        if (slot) slot.innerHTML = '';
+      } else if (key === 'css') {
+        const slot = doc.getElementById('css-slot');
+        if (slot) slot.textContent = '';
+      } else if (key === 'js') {
+        const old = doc.getElementById('js-slot');
+        if (old) old.remove();
+        const script = doc.createElement('script');
+        script.id = 'js-slot';
+        doc.body.appendChild(script);
+      }
+    }
 
-function clearAllPreview(){
-  clearPreviewSlot('html');
-  clearPreviewSlot('css');
-  clearPreviewSlot('js');
-}
+    function clearAllPreview() {
+      clearPreviewSlot('html');
+      clearPreviewSlot('css');
+      clearPreviewSlot('js');
+    }
 
-function wait(ms){
-  return new Promise(r => setTimeout(r, ms));
-}
+    function wait(ms) {
+      return new Promise(r => setTimeout(r, ms));
+    }
 
-function renderPreview(){
-  if(!frameReady) return;
-  updateHTML();
-  updateCSS();
-  updateJS();
-}
+    function renderPreview() {
+      if (!frameReady) return;
+      updateHTML();
+      updateCSS();
+      updateJS();
+    }
 
-editors.html.addEventListener('input', () => { refreshHighlight('html'); if(frameReady) updateHTML(); });
-editors.css.addEventListener('input', () => { refreshHighlight('css'); if(frameReady) updateCSS(); });
-editors.js.addEventListener('input', () => { refreshHighlight('js'); if(frameReady) updateJS(); });
+    editors.html.addEventListener('input', () => { refreshHighlight('html'); if (frameReady) updateHTML(); });
+    editors.css.addEventListener('input', () => { refreshHighlight('css'); if (frameReady) updateCSS(); });
+    editors.js.addEventListener('input', () => { refreshHighlight('js'); if (frameReady) updateJS(); });
 
-fontSize.addEventListener('input', () => {
-  Object.values(editors).forEach(e => e.style.fontSize = fontSize.value + 'px');
-  Object.values(highlights).forEach(h => h.style.fontSize = fontSize.value + 'px');
-});
+    fontSize.addEventListener('input', () => {
+      Object.values(editors).forEach(e => e.style.fontSize = fontSize.value + 'px');
+      Object.values(highlights).forEach(h => h.style.fontSize = fontSize.value + 'px');
+    });
 
-document.getElementById('resetBtn').addEventListener('click', () => {
-  if(isPlaying) return;
-  editors.html.value = defaults.html;
-  editors.css.value = defaults.css;
-  editors.js.value = defaults.js;
-  refreshAllHighlights();
-  renderPreview();
-});
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      if (isPlaying) return;
+      editors.html.value = defaults.html;
+      editors.css.value = defaults.css;
+      editors.js.value = defaults.js;
+      refreshAllHighlights();
+      renderPreview();
+    });
 
-presentToggle.addEventListener('click', () => {
-  document.body.classList.toggle('present');
-  presentToggle.textContent = document.body.classList.contains('present') ? 'Show UI' : 'Hide UI';
-});
+    presentToggle.addEventListener('click', () => {
+      document.body.classList.toggle('present');
+      presentToggle.textContent = document.body.classList.contains('present') ? 'Show UI' : 'Hide UI';
+    });
 
-/* ---------- Autotype engine ---------- */
-let isPlaying = false;
-let stopRequested = false;
+    /* ---------- Autotype engine ---------- */
+    let isPlaying = false;
+    let stopRequested = false;
 
-function charsPerTick(){
-  // speed slider 1-10 -> chars typed per animation tick
-  return Math.max(1, Math.round(Number(speed.value) / 2));
-}
+    function charsPerTick() {
+      // speed slider 1-10 -> chars typed per animation tick
+      return Math.max(1, Math.round(Number(speed.value) / 2));
+    }
 
-function tickDelay(){
-  // faster slider = shorter delay
-  return Math.max(8, 40 - Number(speed.value) * 3);
-}
+    function tickDelay() {
+      // faster slider = shorter delay
+      return Math.max(8, 40 - Number(speed.value) * 3);
+    }
 
-async function typeInto(key, script){
-  const editorEl = editors[key];
-  const update = updaters[key];
-  editorEl.value = '';
-  editorEl.readOnly = true;
-  update();
-  refreshHighlight(key);
-  let i = 0;
-  while(i < script.length){
-    if(stopRequested) break;
-    const step = charsPerTick();
-    editorEl.value += script.slice(i, i + step);
-    i += step;
-    editorEl.scrollTop = editorEl.scrollHeight;
-    update();
-    refreshHighlight(key);
-    await new Promise(r => setTimeout(r, tickDelay()));
-  }
-  editorEl.readOnly = false;
-  update();
-  refreshHighlight(key);
-}
+    async function typeInto(key, script) {
+      const editorEl = editors[key];
+      const update = updaters[key];
+      editorEl.value = '';
+      editorEl.readOnly = true;
+      update();
+      refreshHighlight(key);
+      let i = 0;
+      while (i < script.length) {
+        if (stopRequested) break;
+        const step = charsPerTick();
+        editorEl.value += script.slice(i, i + step);
+        i += step;
+        editorEl.scrollTop = editorEl.scrollHeight;
+        update();
+        refreshHighlight(key);
+        await new Promise(r => setTimeout(r, tickDelay()));
+      }
+      editorEl.readOnly = false;
+      update();
+      refreshHighlight(key);
+    }
 
-function setPlayingState(playing){
-  isPlaying = playing;
-  playBtn.disabled = playing;
-  playAllBtn.disabled = playing;
-  stopBtn.disabled = !playing;
-  document.querySelectorAll('.action:not(#stopBtn)').forEach(b => { if(playing) b.setAttribute('disabled','') ; });
-  stopBtn.disabled = !playing;
-  if(!playing){
-    playBtn.removeAttribute('disabled');
-    playAllBtn.removeAttribute('disabled');
-    document.getElementById('resetBtn').removeAttribute('disabled');
-  }
-}
+    function setPlayingState(playing) {
+      isPlaying = playing;
+      playBtn.disabled = playing;
+      playAllBtn.disabled = playing;
+      stopBtn.disabled = !playing;
+      document.querySelectorAll('.action:not(#stopBtn)').forEach(b => { if (playing) b.setAttribute('disabled', ''); });
+      stopBtn.disabled = !playing;
+      if (!playing) {
+        playBtn.removeAttribute('disabled');
+        playAllBtn.removeAttribute('disabled');
+        document.getElementById('resetBtn').removeAttribute('disabled');
+      }
+    }
 
-playBtn.addEventListener('click', async () => {
-  if(isPlaying) return;
-  const activeKey = Object.keys(editors).find(k => editors[k].classList.contains('active'));
-  const script = editors[activeKey].value;
-  if(!script.trim()) return;
-  stopRequested = false;
-  setPlayingState(true);
+    playBtn.addEventListener('click', async () => {
+      if (isPlaying) return;
+      const activeKey = Object.keys(editors).find(k => editors[k].classList.contains('active'));
+      const script = editors[activeKey].value;
+      if (!script.trim()) return;
+      stopRequested = false;
+      setPlayingState(true);
 
-  clearAllPreview();
-  await wait(2000);
-  if(stopRequested){ setPlayingState(false); return; }
+      clearAllPreview();
+      await wait(2000);
+      if (stopRequested) { setPlayingState(false); return; }
 
-  await typeInto(activeKey, script);
-  setPlayingState(false);
-});
+      await typeInto(activeKey, script);
+      setPlayingState(false);
+    });
 
-playAllBtn.addEventListener('click', async () => {
-  if(isPlaying) return;
-  const scripts = { html: editors.html.value, css: editors.css.value, js: editors.js.value };
-  stopRequested = false;
-  setPlayingState(true);
+    playAllBtn.addEventListener('click', async () => {
+      if (isPlaying) return;
+      const scripts = { html: editors.html.value, css: editors.css.value, js: editors.js.value };
+      stopRequested = false;
+      setPlayingState(true);
 
-  // Blank white screen first, then raw HTML shows unstyled until the CSS
-  // phase actually types the styles in, and JS doesn't run until its turn.
-  clearAllPreview();
-  await wait(2000);
-  if(stopRequested){ setPlayingState(false); return; }
+      // Blank white screen first, then raw HTML shows unstyled until the CSS
+      // phase actually types the styles in, and JS doesn't run until its turn.
+      clearAllPreview();
+      await wait(2000);
+      if (stopRequested) { setPlayingState(false); return; }
 
-  for(const key of ['html','css','js']){
-    if(stopRequested) break;
-    if(!scripts[key].trim()) continue;
-    activateTab(key);
-    await typeInto(key, scripts[key]);
-  }
-  setPlayingState(false);
-});
+      for (const key of ['html', 'css', 'js']) {
+        if (stopRequested) break;
+        if (!scripts[key].trim()) continue;
+        activateTab(key);
+        await typeInto(key, scripts[key]);
+      }
+      setPlayingState(false);
+    });
 
-stopBtn.addEventListener('click', () => {
-  stopRequested = true;
-});
+    stopBtn.addEventListener('click', () => {
+      stopRequested = true;
+    });
 
-refreshAllHighlights();
-renderPreview();
-</script>
+    refreshAllHighlights();
+    renderPreview();
+  </script>
 </body>
+
 </html>
