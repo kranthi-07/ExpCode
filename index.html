@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EXP Live Sandbox</title>
+  <title>EXP Live Sandbox v3</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
     href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap"
@@ -21,17 +21,12 @@
       --white: #ECECEC;
       --line: #1E2330;
       --muted: #6B7280;
+      --rail: 60px;
+      --expanded: 300px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html,
-    body {
-      margin: 0;
-      height: 100%;
-    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
 
     body {
       background: var(--bg);
@@ -41,7 +36,6 @@
       justify-content: center;
       align-items: center;
       height: 100dvh;
-      /* overflow: hidden; */
     }
 
     .app-wrap {
@@ -64,51 +58,158 @@
       position: relative;
     }
 
-    /* ---------- Side panel: recording controls, sits outside the 9:16 frame ---------- */
+    /* ---------- Side panel: always expanded ---------- */
     .side-panel {
       flex-shrink: 0;
-      width: 250px;
+      width: var(--expanded);
       display: flex;
       flex-direction: column;
-      gap: 14px;
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: 12px;
-      padding: 16px;
       align-self: center;
+      max-height: 100%;
+      overflow: hidden;
     }
 
-    .side-panel h3 {
-      margin: 0;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--muted);
-      font-weight: 700;
-    }
-
-    .side-group {
+    .panel-inner {
+      width: var(--expanded);
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
+      padding: 10px;
+      overflow-y: auto;
+      height: 100%;
     }
 
-    .slider-row {
+    .panel-top {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .slider-row label {
-      font-size: 12px;
-      color: var(--muted);
+      gap: 10px;
       flex-shrink: 0;
     }
 
-    .slider-row input[type=range] {
-      width: 100%;
+    .panel-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--muted);
+      white-space: nowrap;
     }
+
+    /* Panel tabs (Playback / Appearance / Snippets) */
+    .panel-tabs { display: flex; gap: 6px; flex-shrink: 0; }
+    .panel-tab {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      height: 36px;
+      background: transparent;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .panel-tab.active { color: var(--orange); border-color: var(--orange); background: rgba(255,106,44,0.08); }
+
+    .panel-section {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px;
+      flex-shrink: 0;
+    }
+    .panel-section.active { display: flex; }
+    .section-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); font-weight: 700; margin: 0; }
+
+    .slider-row { display: flex; align-items: center; gap: 8px; }
+    .slider-row .row-icon { width: 20px; text-align: center; flex-shrink: 0; }
+    .slider-row label { font-size: 12px; color: var(--muted); flex-shrink: 0; width: 40px; }
+    .slider-row input[type=range] { flex: 1; width: auto; }
+    .num-input {
+      width: 44px;
+      flex-shrink: 0;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--white);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      text-align: center;
+      padding: 4px 2px;
+    }
+    .num-input:focus { outline: none; border-color: var(--orange); }
+    input[type=range] { accent-color: var(--orange); }
+
+    /* Theme swatches */
+    .swatch-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .swatch {
+      width: 30px; height: 30px; border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      flex-shrink: 0;
+    }
+    .swatch.active { border-color: #fff; }
+
+    .custom-color-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .custom-color-row label { font-size: 12px; color: var(--muted); }
+    .custom-color-row input[type=color] {
+      width: 34px; height: 24px; border: 1px solid var(--line); border-radius: 4px;
+      background: transparent; cursor: pointer; padding: 0;
+    }
+
+    /* Snippet library */
+    .snippet-list { display: flex; flex-direction: column; gap: 6px; }
+    .snippet-btn {
+      display: flex; align-items: center; gap: 10px;
+      background: transparent;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 9px 10px;
+      color: var(--white);
+      font-size: 12px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      white-space: nowrap;
+    }
+    .snippet-btn:hover, .snippet-btn.active { border-color: var(--steel); color: var(--steel); }
+    .snippet-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); flex-shrink: 0; }
+
+    /* ---------- Controls (always visible, pinned to bottom) ---------- */
+    .controls-group {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex-shrink: 0;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+    }
+
+    button.action {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: transparent; color: var(--white); border: 1px solid var(--line); border-radius: 8px;
+      height: 40px;
+      padding: 0 10px;
+      font-size: 12px; font-family: 'Space Grotesk', sans-serif; font-weight: 600;
+      cursor: pointer; white-space: nowrap; width: 100%; text-align: left;
+    }
+    button.action .ic { width: 20px; text-align: center; flex-shrink: 0; font-size: 14px; }
+    button.action:hover { border-color: var(--orange); color: var(--orange); }
+    button.action.primary { border-color: var(--orange); color: var(--orange); }
+    button.action:disabled { opacity: 0.35; cursor: default; }
 
     /* ---------- Top half: live preview ---------- */
     .preview-pane {
@@ -129,298 +230,103 @@
       background: var(--panel);
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-weight: 700;
-      font-size: 12px;
-      letter-spacing: 0.5px;
-    }
+    .brand { display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 12px; letter-spacing: 0.5px; }
+    .brand .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 6px var(--orange); }
 
-    .brand .dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--orange);
-      box-shadow: 0 0 6px var(--orange);
-    }
+    .rec { display: flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; color: #ff4444; letter-spacing: 1px; }
+    .rec .blip { width: 6px; height: 6px; border-radius: 50%; background: #ff4444; animation: pulse 1.2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
 
-    .rec {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 10px;
-      font-weight: 700;
-      color: #ff4444;
-      letter-spacing: 1px;
-    }
-
-    .rec .blip {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #ff4444;
-      animation: pulse 1.2s infinite;
-    }
-
-    @keyframes pulse {
-
-      0%,
-      100% {
-        opacity: 1;
-      }
-
-      50% {
-        opacity: 0.25;
-      }
-    }
-
-    iframe {
-      flex: 1;
-      width: 100%;
-      border: none;
-      background: #fff;
-    }
+    iframe { flex: 1; width: 100%; border: none; background: #fff; }
 
     /* ---------- Bottom half: editor ---------- */
-    .editor-pane {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-height: 0;
-      background: var(--panel);
-    }
+    .editor-pane { flex: 1; display: flex; flex-direction: column; min-height: 0; background: var(--panel); }
 
-    .tabs {
-      flex-shrink: 0;
-      display: flex;
-      gap: 6px;
-      padding: 8px 10px;
-      border-bottom: 1px solid var(--line);
-    }
-
+    .tabs { flex-shrink: 0; display: flex; gap: 6px; padding: 8px 10px; border-bottom: 1px solid var(--line); }
     .tab {
-      flex: 1;
-      background: transparent;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 8px 0;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--muted);
-      cursor: pointer;
-      letter-spacing: 0.5px;
-      transition: all .15s ease;
+      flex: 1; background: transparent; border: 1px solid var(--line); border-radius: 8px;
+      padding: 8px 0; font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700;
+      color: var(--muted); cursor: pointer; letter-spacing: 0.5px; transition: all .15s ease;
     }
+    .tab.active[data-tab="html"] { color: var(--orange); border-color: var(--orange); background: rgba(255,106,44,0.08); }
+    .tab.active[data-tab="css"] { color: var(--steel); border-color: var(--steel); background: rgba(95,168,211,0.08); }
+    .tab.active[data-tab="js"] { color: #F2C744; border-color: #F2C744; background: rgba(242,199,68,0.08); }
 
-    .tab.active[data-tab="html"] {
-      color: var(--orange);
-      border-color: var(--orange);
-      background: rgba(255, 106, 44, 0.08);
+    .tab-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 6px; }
+    .tab[data-tab="html"] .tab-dot { background: var(--orange); }
+    .tab[data-tab="css"] .tab-dot { background: var(--steel); }
+    .tab[data-tab="js"] .tab-dot { background: #F2C744; }
+
+    .editors { position: relative; flex: 1; min-height: 0; }
+    .editor-item { position: absolute; inset: 0; display: none; background: var(--bg); }
+    .editor-item.active { display: block; }
+
+    .highlight, textarea {
+      position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; border: none;
+      font-family: 'JetBrains Mono', monospace; font-size: 14px; line-height: 1.5;
+      padding: 12px 14px; white-space: pre-wrap; word-break: break-word; overflow: auto;
     }
-
-    .tab.active[data-tab="css"] {
-      color: var(--steel);
-      border-color: var(--steel);
-      background: rgba(95, 168, 211, 0.08);
-    }
-
-    .tab.active[data-tab="js"] {
-      color: #F2C744;
-      border-color: #F2C744;
-      background: rgba(242, 199, 68, 0.08);
-    }
-
-    .tab-dot {
-      display: inline-block;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      margin-right: 6px;
-    }
-
-    .tab[data-tab="html"] .tab-dot {
-      background: var(--orange);
-    }
-
-    .tab[data-tab="css"] .tab-dot {
-      background: var(--steel);
-    }
-
-    .tab[data-tab="js"] .tab-dot {
-      background: #F2C744;
-    }
-
-    .editors {
-      position: relative;
-      flex: 1;
-      min-height: 0;
-    }
-
-    .editor-item {
-      position: absolute;
-      inset: 0;
-      display: none;
-      background: var(--bg);
-    }
-
-    .editor-item.active {
-      display: block;
-    }
-
-    .highlight,
+    .highlight { color: var(--white); pointer-events: none; z-index: 1; }
     textarea {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      border: none;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 14px;
-      line-height: 1.5;
-      padding: 12px 14px;
-      white-space: pre-wrap;
-      word-break: break-word;
-      overflow: auto;
+      z-index: 2; outline: none; resize: none; background: transparent; color: transparent;
+      -webkit-text-fill-color: transparent; caret-color: var(--orange);
     }
 
-    .highlight {
-      color: var(--white);
-      pointer-events: none;
-      z-index: 1;
+    .tk-kw { color: var(--orange); font-weight: 700; }
+    .tk-str { color: #9EE493; }
+    .tk-com { color: var(--muted); font-style: italic; }
+    .tk-num { color: var(--steel); }
+    .tk-tag { color: var(--orange); }
+    .tk-attr { color: var(--steel); }
+    .tk-fn { color: #F2C744; }
+
+    /* Present mode: hide chrome so only frame content shows */
+    body.present .preview-header, body.present .tabs { display: none !important; }
+    body.present .shorts-frame { border: none; }
+    body.present #presentToggle { border-color: var(--orange); color: var(--orange); }
+
+    @media (max-width: 500px) {
+      .app-wrap { flex-direction: column; align-items: center; width: 100%; }
+      .side-panel { width: 100%; max-width: 500px; height: auto; }
+      .panel-inner { width: 100%; }
+      .shorts-frame { width: 100%; max-width: 500px; height: auto; }
     }
 
-    textarea {
-      z-index: 2;
-      outline: none;
-      resize: none;
-      background: transparent;
-      color: transparent;
-      -webkit-text-fill-color: transparent;
-      caret-color: var(--orange);
-    }
-
-    /* token colors */
-    .tk-kw {
-      color: var(--orange);
-      font-weight: 700;
-    }
-
-    .tk-str {
-      color: #9EE493;
-    }
-
-    .tk-com {
-      color: var(--muted);
-      font-style: italic;
-    }
-
-    .tk-num {
-      color: var(--steel);
-    }
-
-    .tk-tag {
-      color: var(--orange);
-    }
-
-    .tk-attr {
-      color: var(--steel);
-    }
-
-    .tk-fn {
-      color: #F2C744;
-    }
-
-    .toolbar-left {
+    .app-badge {
+      position: fixed;
+      top: 14px;
+      left: 16px;
       display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    input[type=range] {
-      accent-color: var(--orange);
-    }
-
-    button.action {
-      background: transparent;
-      color: var(--white);
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      padding: 8px 9px;
-      font-size: 12px;
+      align-items: center;
+      gap: 8px;
+      z-index: 100;
       font-family: 'Space Grotesk', sans-serif;
+      pointer-events: none;
+    }
+    .badge-credit {
+      font-size: 11px;
       font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
-      width: 100%;
-      text-align: center;
+      color: var(--muted);
+      letter-spacing: 0.3px;
     }
-
-    button.action:hover {
-      border-color: var(--orange);
+    .badge-version {
+      font-size: 10px;
+      font-weight: 700;
       color: var(--orange);
-    }
-
-    button.action.primary {
-      border-color: var(--orange);
-      color: var(--orange);
-    }
-
-    button.action:disabled {
-      opacity: 0.35;
-      cursor: default;
-    }
-
-    /* Present mode: hide chrome so only frame content shows (clean for capture) */
-    body.present .preview-header,
-    body.present .tabs {
-      display: none !important;
-    }
-
-    body.present .shorts-frame {
-      border: none;
-    }
-
-    body.present #presentToggle {
-      border-color: var(--orange);
-      color: var(--orange);
-    }
-
-
-    @media(max-width:500px) {
-      .app-wrap {
-        flex-direction: column;
-        align-items: center;
-        width:100%;
-        /* padding:10px; */
-      }
-
-      .side-panel {
-        width: 300px;
-      }
-
-      .shorts-frame {
-        width: 100%;
-        max-width: 500px;
-        height: auto;
-      }
-
-      .toolbar-left {
-        flex-direction: row;
-        flex-wrap: wrap;
-      }
-
-      button.action {
-        width: 48%;
-      }
+      border: 1px solid var(--orange);
+      border-radius: 20px;
+      padding: 2px 8px;
+      background: rgba(255,106,44,0.08);
     }
   </style>
 </head>
 
 <body>
+
+  <div class="app-badge">
+    <span class="badge-credit">Created by EXP STUDIO</span>
+    <span class="badge-version">v2</span>
+  </div>
 
   <div class="app-wrap">
     <div class="shorts-frame">
@@ -442,81 +348,138 @@
         <div class="editors">
           <div class="editor-item active" data-item="html">
             <pre class="highlight" id="htmlHighlight"></pre>
-            <textarea id="htmlEditor" spellcheck="false" placeholder="&lt;h1&gt;Hello EXP&lt;/h1&gt;">&lt;h1&gt;Hello EXP&lt;/h1&gt;
-&lt;p&gt;Edit HTML, CSS or JS — the preview above updates live.&lt;/p&gt;
-&lt;button id="btn"&gt;Click me&lt;/button&gt;</textarea>
+            <textarea id="htmlEditor" spellcheck="false"></textarea>
           </div>
           <div class="editor-item" data-item="css">
             <pre class="highlight" id="cssHighlight"></pre>
-            <textarea id="cssEditor" spellcheck="false" placeholder="body{ background:#fff; }">body{
-  font-family: sans-serif;
-  text-align:center;
-  padding:24px;
-  background:#fff;
-  color:#111;
-}
-h1{ color:#FF6A2C; }
-button{
-  padding:10px 18px;
-  border:none;
-  border-radius:8px;
-  background:#5FA8D3;
-  color:#fff;
-  font-weight:600;
-  cursor:pointer;
-}</textarea>
+            <textarea id="cssEditor" spellcheck="false"></textarea>
           </div>
           <div class="editor-item" data-item="js">
             <pre class="highlight" id="jsHighlight"></pre>
-            <textarea id="jsEditor" spellcheck="false" placeholder="console.log('hi')">document.getElementById('btn').addEventListener('click', function(){
-  alert('Hello from EXP Studio!');
-});</textarea>
+            <textarea id="jsEditor" spellcheck="false"></textarea>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="side-panel">
-      <div class="side-group">
-        <h3>Playback</h3>
-        <div class="slider-row">
-          <label for="fontSize">Size</label>
-          <input type="range" id="fontSize" min="11" max="22" value="14">
+    <div class="side-panel" id="sidePanel">
+      <div class="panel-inner">
+        <div class="panel-top">
+          <span class="panel-title">SETTINGS</span>
         </div>
-        <div class="slider-row">
-          <label for="speed">Speed</label>
-          <input type="range" id="speed" min="1" max="10" value="5">
+
+        <div class="panel-tabs">
+          <button class="panel-tab active" data-panel="playback" title="Playback">⏱ Playback</button>
+          <button class="panel-tab" data-panel="appearance" title="Appearance">🎨 Style</button>
+          <!-- <button class="panel-tab" data-panel="snippets" title="Snippets">🧩 Demos</button> -->
         </div>
-      </div>
-      <div class="side-group">
-        <h3>Controls</h3>
-        <div class="toolbar-left">
-          <button class="action primary" id="playBtn">▶ Autotype</button>
-          <button class="action" id="playAllBtn">▶▶ Play All</button>
-          <button class="action" id="stopBtn" disabled>■ Stop</button>
-          <button class="action" id="resetBtn">Reset</button>
-          <button class="action" id="presentToggle">Hide UI</button>
+
+        <div class="panel-section active" data-section="playback">
+          <p class="section-label">Playback</p>
+          <div class="slider-row">
+            <span class="row-icon">🔠</span>
+            <label for="fontSize">Size</label>
+            <input type="range" id="fontSize" min="11" max="22" value="14">
+            <input type="number" id="fontSizeNum" class="num-input" min="11" max="22" value="14">
+          </div>
+          <div class="slider-row">
+            <span class="row-icon">⚡</span>
+            <label for="speed">Speed</label>
+            <input type="range" id="speed" min="1" max="10" value="5">
+            <input type="number" id="speedNum" class="num-input" min="1" max="10" value="5">
+          </div>
+        </div>
+
+        <div class="panel-section" data-section="appearance">
+          <p class="section-label">Theme</p>
+          <div class="swatch-row" id="swatchRow"></div>
+          <div class="custom-color-row">
+            <label for="customOrange">Primary</label>
+            <input type="color" id="customOrange" value="#FF6A2C">
+          </div>
+          <div class="custom-color-row">
+            <label for="customSteel">Secondary</label>
+            <input type="color" id="customSteel" value="#5FA8D3">
+          </div>
+        </div>
+
+        <div class="panel-section" data-section="snippets">
+          <p class="section-label">Demos</p>
+          <div class="snippet-list" id="snippetList"></div>
+          <button class="action" id="shuffleBtn"><span class="ic">🔀</span><span class="lbl">Shuffle Demo</span></button>
+        </div>
+
+        <div class="controls-group">
+          <button class="action primary" id="playAllBtn"><span class="ic">▶▶</span><span class="lbl">Play All</span></button>
+          <button class="action" id="stopBtn" disabled><span class="ic">■</span><span class="lbl">Stop</span></button>
+          <button class="action" id="resetBtn"><span class="ic">⟲</span><span class="lbl">Reset</span></button>
+          <button class="action" id="presentToggle"><span class="ic">👁</span><span class="lbl">Hide UI</span></button>
         </div>
       </div>
     </div>
   </div>
 
   <script>
+    /* ================= Snippet library ================= */
+    const SNIPPETS = {
+      hello: {
+        label: 'Hello EXP',
+        html: '<h1>Hello EXP</h1>\n<p>Edit HTML, CSS or JS — the preview above updates live.</p>\n<button id="btn">Click me</button>',
+        css: 'body{\n  font-family: sans-serif;\n  text-align:center;\n  padding:24px;\n  background:#fff;\n  color:#111;\n}\nh1{ color:#FF6A2C; }\nbutton{\n  padding:10px 18px;\n  border:none;\n  border-radius:8px;\n  background:#5FA8D3;\n  color:#fff;\n  font-weight:600;\n  cursor:pointer;\n}',
+        js: "document.getElementById('btn').addEventListener('click', function(){\n  alert('Hello from EXP Studio!');\n});"
+      },
+      glow: {
+        label: 'Glow Button',
+        html: '<button class="glow-btn">Hover Me</button>',
+        css: 'body{ display:flex; justify-content:center; align-items:center; height:100vh; margin:0; background:#111; }\n.glow-btn{\n  padding:16px 40px;\n  font-size:18px;\n  font-weight:700;\n  color:#fff;\n  border:none;\n  border-radius:50px;\n  background:linear-gradient(135deg,#FF6A2C,#5FA8D3);\n  cursor:pointer;\n  transition:0.3s;\n}\n.glow-btn:hover{\n  transform:scale(1.1);\n  box-shadow:0 0 30px #FF6A2C;\n}',
+        js: ''
+      },
+      flip: {
+        label: 'Flip Card',
+        html: '<div class="card"><div class="inner">\n  <div class="front">EXP</div>\n  <div class="back">STUDIO</div>\n</div></div>',
+        css: 'body{ display:flex; justify-content:center; align-items:center; height:100vh; margin:0; background:#0A0C12; }\n.card{ width:200px; height:260px; perspective:1000px; }\n.inner{ position:relative; width:100%; height:100%; transition:0.6s; transform-style:preserve-3d; }\n.card:hover .inner{ transform:rotateY(180deg); }\n.front,.back{\n  position:absolute; width:100%; height:100%;\n  display:flex; align-items:center; justify-content:center;\n  font-size:28px; font-weight:700; color:#fff;\n  border-radius:16px; backface-visibility:hidden;\n}\n.front{ background:#FF6A2C; }\n.back{ background:#5FA8D3; transform:rotateY(180deg); }',
+        js: ''
+      },
+      counter: {
+        label: 'Click Counter',
+        html: '<h1 id="count">0</h1>\n<button onclick="inc()">Tap Me</button>',
+        css: 'body {\n  text-align: center;\n  font-family: sans-serif;\n  padding-top: 80px;\n  background: #fff;\n}\n\nh1 {\n  font-size: 60px;\n  color: #ff6a2c;\n}\n\nbutton {\n  padding: 12px 28px;\n  border: none;\n  border-radius: 8px;\n  background: #111;\n  color: #fff;\n  font-size: 16px;\n}',
+        js: 'let n = 0;\n\nfunction inc() {\n  n++;\n  document.getElementById("count").textContent = n;\n}'
+      },
+      spinner: {
+        label: 'Loading Spinner',
+        html: '<div class="spinner"></div>',
+        css: 'body{ display:flex; justify-content:center; align-items:center; height:100vh; margin:0; background:#0A0C12; }\n.spinner{\n  width:60px; height:60px;\n  border:6px solid #222;\n  border-top:6px solid #FF6A2C;\n  border-radius:50%;\n  animation:spin 1s linear infinite;\n}\n@keyframes spin{ to{ transform:rotate(360deg); } }',
+        js: ''
+      },
+      toggle: {
+        label: 'Dark/Light Toggle',
+        html: '<div class="wrap">\n  <h1>Hello EXP</h1>\n  <label class="switch">\n    <input type="checkbox" id="modeToggle" />\n    <span class="track">\n      <span class="thumb">🌙</span>\n    </span>\n  </label>\n</div>',
+        css: 'body {\n  margin: 0;\n  height: 100vh;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-family: sans-serif;\n  background: linear-gradient(135deg, #fdfbfb, #ebedee);\n  transition: background 0.6s ease;\n}\n\nbody.dark {\n  background: linear-gradient(135deg, #0f0f1a, #1c1c2b);\n}\n\n.wrap {\n  text-align: center;\n  color: #111;\n  transition: color 0.6s ease;\n}\n\nbody.dark .wrap {\n  color: #f2f2f2;\n}\n\nh1 {\n  margin-bottom: 24px;\n}\n\n.switch {\n  display: inline-block;\n  cursor: pointer;\n}\n\n.switch input {\n  display: none;\n}\n\n.track {\n  display: flex;\n  align-items: center;\n  width: 70px;\n  height: 34px;\n  border-radius: 34px;\n  background: #ccc;\n  padding: 3px;\n  transition: background 0.4s ease;\n}\n\nbody.dark .track {\n  background: #4b4bad;\n}\n\n.thumb {\n  width: 28px;\n  height: 28px;\n  border-radius: 50%;\n  background: #fff;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-size: 14px;\n  transition: transform 0.4s ease;\n}\n\nbody.dark .thumb {\n  transform: translateX(36px);\n}',
+        js: 'const toggle = document.getElementById("modeToggle");\n\ntoggle.addEventListener("change", () => {\n  document.body.classList.toggle("dark", toggle.checked);\n});'
+      }
+    };
+    let currentSnippetKey = 'hello';
+
+    /* ================= Theme presets ================= */
+    const THEMES = [
+      { name: 'Sunset',    orange: '#FF6A2C', steel: '#5FA8D3' },
+      { name: 'Synthwave', orange: '#FF2E9A', steel: '#8A5CF6' },
+      { name: 'Mint',      orange: '#2ED8A7', steel: '#3FA796' },
+      { name: 'Ocean',     orange: '#2EA0FF', steel: '#1DD3B0' },
+      { name: 'Gold',      orange: '#F2C744', steel: '#FF6A2C' }
+    ];
+
     const tabs = document.querySelectorAll('.tab');
     const editors = { html: document.getElementById('htmlEditor'), css: document.getElementById('cssEditor'), js: document.getElementById('jsEditor') };
     const frame = document.getElementById('previewFrame');
     const fontSize = document.getElementById('fontSize');
+    const fontSizeNum = document.getElementById('fontSizeNum');
     const speed = document.getElementById('speed');
-    const playBtn = document.getElementById('playBtn');
+    const speedNum = document.getElementById('speedNum');
     const playAllBtn = document.getElementById('playAllBtn');
     const stopBtn = document.getElementById('stopBtn');
     const presentToggle = document.getElementById('presentToggle');
-
-    const defaults = {
-      html: '<h1>Hello EXP</h1>\n<p>Edit HTML, CSS or JS — the preview above updates live.</p>\n<button id="btn">Click me</button>',
-      css: 'body{\n  font-family: sans-serif;\n  text-align:center;\n  padding:24px;\n  background:#fff;\n  color:#111;\n}\nh1{ color:#FF6A2C; }\nbutton{\n  padding:10px 18px;\n  border:none;\n  border-radius:8px;\n  background:#5FA8D3;\n  color:#fff;\n  font-weight:600;\n  cursor:pointer;\n}',
-      js: "document.getElementById('btn').addEventListener('click', function(){\n  alert('Hello from EXP Studio!');\n});"
-    };
 
     function activateTab(name) {
       tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
@@ -607,6 +570,17 @@ button{
     });
     frame.srcdoc = shellDoc;
 
+    function waitForFrameReady() {
+      return new Promise(resolve => {
+        if (frameReady) return resolve();
+        const check = () => {
+          if (frameReady) resolve();
+          else requestAnimationFrame(check);
+        };
+        check();
+      });
+    }
+
     function updateHTML() {
       const doc = frame.contentDocument;
       if (!doc) return;
@@ -674,35 +648,129 @@ button{
     editors.js.addEventListener('input', () => { refreshHighlight('js'); if (frameReady) updateJS(); });
 
     fontSize.addEventListener('input', () => {
+      fontSizeNum.value = fontSize.value;
       Object.values(editors).forEach(e => e.style.fontSize = fontSize.value + 'px');
       Object.values(highlights).forEach(h => h.style.fontSize = fontSize.value + 'px');
     });
 
+    fontSizeNum.addEventListener('input', () => {
+      let v = Math.min(22, Math.max(11, Number(fontSizeNum.value) || 14));
+      fontSize.value = v;
+      Object.values(editors).forEach(e => e.style.fontSize = v + 'px');
+      Object.values(highlights).forEach(h => h.style.fontSize = v + 'px');
+    });
+
+    speedNum.addEventListener('input', () => {
+      let v = Math.min(10, Math.max(1, Number(speedNum.value) || 5));
+      speed.value = v;
+    });
+
+    speed.addEventListener('input', () => {
+      speedNum.value = speed.value;
+    });
+
     document.getElementById('resetBtn').addEventListener('click', () => {
       if (isPlaying) return;
-      editors.html.value = defaults.html;
-      editors.css.value = defaults.css;
-      editors.js.value = defaults.js;
-      refreshAllHighlights();
-      renderPreview();
+      loadSnippet('hello');
     });
 
     presentToggle.addEventListener('click', () => {
       document.body.classList.toggle('present');
-      presentToggle.textContent = document.body.classList.contains('present') ? 'Show UI' : 'Hide UI';
     });
 
-    /* ---------- Autotype engine ---------- */
+    /* ---------- Panel tabs (Playback / Appearance / Snippets) ---------- */
+    document.querySelectorAll('.panel-tab').forEach(pt => {
+      pt.addEventListener('click', () => {
+        document.querySelectorAll('.panel-tab').forEach(x => x.classList.toggle('active', x === pt));
+        document.querySelectorAll('.panel-section').forEach(sec => {
+          sec.classList.toggle('active', sec.dataset.section === pt.dataset.panel);
+        });
+      });
+    });
+
+    /* ---------- Theming ---------- */
+    const swatchRow = document.getElementById('swatchRow');
+    const customOrange = document.getElementById('customOrange');
+    const customSteel = document.getElementById('customSteel');
+
+    function applyTheme(orange, steel) {
+      document.documentElement.style.setProperty('--orange', orange);
+      document.documentElement.style.setProperty('--steel', steel);
+      customOrange.value = orange;
+      customSteel.value = steel;
+    }
+
+    THEMES.forEach((theme, i) => {
+      const sw = document.createElement('div');
+      sw.className = 'swatch' + (i === 0 ? ' active' : '');
+      sw.style.background = `linear-gradient(135deg, ${theme.orange}, ${theme.steel})`;
+      sw.title = theme.name;
+      sw.addEventListener('click', () => {
+        document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+        sw.classList.add('active');
+        applyTheme(theme.orange, theme.steel);
+      });
+      swatchRow.appendChild(sw);
+    });
+
+    customOrange.addEventListener('input', () => {
+      document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+      document.documentElement.style.setProperty('--orange', customOrange.value);
+    });
+    customSteel.addEventListener('input', () => {
+      document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+      document.documentElement.style.setProperty('--steel', customSteel.value);
+    });
+
+    /* ---------- Snippet library ---------- */
+    const snippetList = document.getElementById('snippetList');
+
+    function buildSnippetButtons() {
+      snippetList.innerHTML = '';
+      Object.keys(SNIPPETS).forEach(key => {
+        const btn = document.createElement('button');
+        btn.className = 'snippet-btn' + (key === currentSnippetKey ? ' active' : '');
+        btn.dataset.key = key;
+        btn.innerHTML = `<span class="snippet-dot"></span>${SNIPPETS[key].label}`;
+        btn.addEventListener('click', () => {
+          if (isPlaying) return;
+          loadSnippet(key);
+        });
+        snippetList.appendChild(btn);
+      });
+    }
+
+    function loadSnippet(key) {
+      const s = SNIPPETS[key];
+      if (!s) return;
+      currentSnippetKey = key;
+      editors.html.value = s.html;
+      editors.css.value = s.css;
+      editors.js.value = s.js;
+      refreshAllHighlights();
+      renderPreview();
+      document.querySelectorAll('.snippet-btn').forEach(b => b.classList.toggle('active', b.dataset.key === key));
+    }
+
+    document.getElementById('shuffleBtn').addEventListener('click', () => {
+      if (isPlaying) return;
+      const keys = Object.keys(SNIPPETS).filter(k => k !== currentSnippetKey);
+      const pick = keys[Math.floor(Math.random() * keys.length)];
+      loadSnippet(pick);
+    });
+
+    buildSnippetButtons();
+    loadSnippet('hello');
+
+    /* ---------- Play All engine ---------- */
     let isPlaying = false;
     let stopRequested = false;
 
     function charsPerTick() {
-      // speed slider 1-10 -> chars typed per animation tick
       return Math.max(1, Math.round(Number(speed.value) / 2));
     }
 
     function tickDelay() {
-      // faster slider = shorter delay
       return Math.max(8, 40 - Number(speed.value) * 3);
     }
 
@@ -731,33 +799,14 @@ button{
 
     function setPlayingState(playing) {
       isPlaying = playing;
-      playBtn.disabled = playing;
       playAllBtn.disabled = playing;
       stopBtn.disabled = !playing;
-      document.querySelectorAll('.action:not(#stopBtn)').forEach(b => { if (playing) b.setAttribute('disabled', ''); });
+      document.querySelectorAll('.action:not(#stopBtn):not(#presentToggle)').forEach(b => {
+        if (playing) b.setAttribute('disabled', '');
+        else b.removeAttribute('disabled');
+      });
       stopBtn.disabled = !playing;
-      if (!playing) {
-        playBtn.removeAttribute('disabled');
-        playAllBtn.removeAttribute('disabled');
-        document.getElementById('resetBtn').removeAttribute('disabled');
-      }
     }
-
-    playBtn.addEventListener('click', async () => {
-      if (isPlaying) return;
-      const activeKey = Object.keys(editors).find(k => editors[k].classList.contains('active'));
-      const script = editors[activeKey].value;
-      if (!script.trim()) return;
-      stopRequested = false;
-      setPlayingState(true);
-
-      clearAllPreview();
-      await wait(2000);
-      if (stopRequested) { setPlayingState(false); return; }
-
-      await typeInto(activeKey, script);
-      setPlayingState(false);
-    });
 
     playAllBtn.addEventListener('click', async () => {
       if (isPlaying) return;
@@ -765,8 +814,7 @@ button{
       stopRequested = false;
       setPlayingState(true);
 
-      // Blank white screen first, then raw HTML shows unstyled until the CSS
-      // phase actually types the styles in, and JS doesn't run until its turn.
+      await waitForFrameReady();
       clearAllPreview();
       await wait(2000);
       if (stopRequested) { setPlayingState(false); return; }
@@ -783,9 +831,6 @@ button{
     stopBtn.addEventListener('click', () => {
       stopRequested = true;
     });
-
-    refreshAllHighlights();
-    renderPreview();
   </script>
 </body>
 
