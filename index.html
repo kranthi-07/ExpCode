@@ -13,7 +13,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap"
     rel="stylesheet">
-  <style>
+   <style>
     :root {
       --bg: #0A0C12;
       --panel: #10131C;
@@ -23,7 +23,7 @@
       --line: #1E2330;
       --muted: #6B7280;
       --rail: 60px;
-      --expanded: 300px;
+      --expanded: 260px;
     }
 
     * { box-sizing: border-box; }
@@ -330,6 +330,27 @@
       padding: 2px 8px;
       background: rgba(255,106,44,0.08);
     }
+
+    .yt-btn {
+      position: fixed;
+      top: 40px;
+      left: 16px;
+      z-index: 100;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      background: #FF0000;
+      border-radius: 20px;
+      padding: 6px 14px;
+      text-decoration: none;
+      pointer-events: auto;
+      transition: background 0.15s ease;
+    }
+    .yt-btn:hover { background: #cc0000; }
   </style>
 </head>
 
@@ -339,6 +360,7 @@
     <span class="badge-credit">Created by EXP STUDIO</span>
     <span class="badge-version">v2</span>
   </div>
+  <a class="yt-btn" href="https://www.youtube.com/channel/UCWfFTJPSLFtXnH5yAZAwLGw" target="_blank" rel="noopener noreferrer">▶ EXP Studio</a>
 
   <div class="app-wrap">
     <div class="shorts-frame">
