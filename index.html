@@ -22,7 +22,7 @@
       --line: #1E2330;
       --muted: #6B7280;
       --rail: 60px;
-      --expanded: 300px;
+      --expanded: 260px;
     }
 
     * { box-sizing: border-box; }
@@ -290,6 +290,17 @@
       .side-panel { width: 100%; max-width: 500px; height: auto; }
       .panel-inner { width: 100%; }
       .shorts-frame { width: 100%; max-width: 500px; height: auto; }
+    }
+
+    /* Hide scrollbars everywhere; scrolling still works */
+    * {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    *::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
     }
 
     .app-badge {
