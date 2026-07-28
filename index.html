@@ -2,6 +2,13 @@
 <html lang="en">
 
 <head>
+  <script type="text/javascript">
+    (function (c, l, a, r, i, t, y) {
+      c[a] = c[a] || function () {(c[a].q = c[a].q || []).push(arguments)};
+      t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
+      y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+    })(window, document, "clarity", "script", "xtcxpggkzu");
+  </script>
   <meta charset="UTF-8" />
   <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
   <meta http-equiv="Pragma" content="no-cache">
@@ -812,15 +819,15 @@
 
     /* ================= Theme presets ================= */
     const THEMES = [
-      { name: 'Sunset', orange: '#FF6A2C', steel: '#5FA8D3' },
-      { name: 'Synthwave', orange: '#FF2E9A', steel: '#8A5CF6' },
-      { name: 'Mint', orange: '#2ED8A7', steel: '#3FA796' },
-      { name: 'Ocean', orange: '#2EA0FF', steel: '#1DD3B0' },
-      { name: 'Gold', orange: '#F2C744', steel: '#FF6A2C' }
+      {name: 'Sunset', orange: '#FF6A2C', steel: '#5FA8D3'},
+      {name: 'Synthwave', orange: '#FF2E9A', steel: '#8A5CF6'},
+      {name: 'Mint', orange: '#2ED8A7', steel: '#3FA796'},
+      {name: 'Ocean', orange: '#2EA0FF', steel: '#1DD3B0'},
+      {name: 'Gold', orange: '#F2C744', steel: '#FF6A2C'}
     ];
 
     const tabs = document.querySelectorAll('.tab');
-    const editors = { html: document.getElementById('htmlEditor'), css: document.getElementById('cssEditor'), js: document.getElementById('jsEditor') };
+    const editors = {html: document.getElementById('htmlEditor'), css: document.getElementById('cssEditor'), js: document.getElementById('jsEditor')};
     const frame = document.getElementById('previewFrame');
     const fontSize = document.getElementById('fontSize');
     const fontSizeNum = document.getElementById('fontSizeNum');
@@ -836,7 +843,7 @@
     }
 
     /* ---------- Syntax highlighting overlay ---------- */
-    const highlights = { html: document.getElementById('htmlHighlight'), css: document.getElementById('cssHighlight'), js: document.getElementById('jsHighlight') };
+    const highlights = {html: document.getElementById('htmlHighlight'), css: document.getElementById('cssHighlight'), js: document.getElementById('jsHighlight')};
 
     function escapeHtml(s) {
       return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -879,7 +886,7 @@
       });
     }
 
-    const highlighters = { html: highlightHTML, css: highlightCSS, js: highlightJS };
+    const highlighters = {html: highlightHTML, css: highlightCSS, js: highlightJS};
 
     function refreshHighlight(key) {
       const el = highlights[key];
@@ -955,7 +962,7 @@
       doc.body.appendChild(script);
     }
 
-    const updaters = { html: updateHTML, css: updateCSS, js: updateJS };
+    const updaters = {html: updateHTML, css: updateCSS, js: updateJS};
 
     function clearPreviewSlot(key) {
       const doc = frame.contentDocument;
@@ -992,9 +999,9 @@
       updateJS();
     }
 
-    editors.html.addEventListener('input', () => { refreshHighlight('html'); if (frameReady) updateHTML(); });
-    editors.css.addEventListener('input', () => { refreshHighlight('css'); if (frameReady) updateCSS(); });
-    editors.js.addEventListener('input', () => { refreshHighlight('js'); if (frameReady) updateJS(); });
+    editors.html.addEventListener('input', () => {refreshHighlight('html'); if (frameReady) updateHTML();});
+    editors.css.addEventListener('input', () => {refreshHighlight('css'); if (frameReady) updateCSS();});
+    editors.js.addEventListener('input', () => {refreshHighlight('js'); if (frameReady) updateJS();});
 
     fontSize.addEventListener('input', () => {
       fontSizeNum.value = fontSize.value;
@@ -1159,14 +1166,14 @@
 
     playAllBtn.addEventListener('click', async () => {
       if (isPlaying) return;
-      const scripts = { html: editors.html.value, css: editors.css.value, js: editors.js.value };
+      const scripts = {html: editors.html.value, css: editors.css.value, js: editors.js.value};
       stopRequested = false;
       setPlayingState(true);
 
       await waitForFrameReady();
       clearAllPreview();
       await wait(2000);
-      if (stopRequested) { setPlayingState(false); return; }
+      if (stopRequested) {setPlayingState(false); return;}
 
       for (const key of ['html', 'css', 'js']) {
         if (stopRequested) break;
